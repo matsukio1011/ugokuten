@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>図形と関数の実験室</title>
+  <rect width="64" height="64" rx="14" fill="#142741"/>
+  <path d="M13 49H49V13Z" fill="#7953ce"/>
+  <path d="M13 49H49V13" fill="none" stroke="#dceaff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13 49L49 13" fill="none" stroke="#87bfff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="31" cy="31" r="7" fill="#f5b942" stroke="#142741" stroke-width="3"/>
+</svg>
