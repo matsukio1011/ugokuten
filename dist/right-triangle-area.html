@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>直角三角形を動く点Pと面積 | 図形と関数の実験室</title><link rel="icon" href="favicon.ico?v=2"><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0c121d}body{font:14px system-ui,"Yu Gothic",sans-serif}h2{font-size:21px;font-weight:500}h3{font-size:16px;font-weight:500}.btn{font:inherit;border:1px solid #35435a;background:#202d40;color:#edf2fa;padding:10px 17px;border-radius:7px;white-space:nowrap;cursor:pointer}.mp-back{text-decoration:none;display:inline-block}.btn-primary{background:#dce9f5;color:#142135}.btn:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #75d8ff;outline-offset:3px}.form-select{font:inherit;padding:9px 12px;border:1px solid #35435a;background:#202d40;color:#edf2fa;border-radius:7px}.form-check{display:flex;align-items:center;gap:7px;white-space:nowrap}.form-check-input,.form-range{accent-color:#75d8ff}.form-range{height:26px}#right-triangle-lab{height:100dvh!important;max-height:100dvh!important;min-height:0!important}</style></head><body>
+<div id="right-triangle-lab">
+  <header class="mp-header">
+    <div><h2>直角三角形を動く点と面積</h2><span class="mp-sub">A → B → C</span></div>
+    <div class="mp-tools"><a class="btn mp-back" href="index.html">問題一覧</a><label><span style="white-space:nowrap">問題</span> <select id="mp-problem" class="form-select" aria-label="問題を選ぶ"></select></label><button id="mp-full" class="btn" type="button">全画面表示</button></div>
+  </header>
+  <main class="mp-visuals">
+    <section class="mp-pane"><div class="mp-panehead"><h3>△APC</h3><span id="mp-side"></span></div><svg id="mp-geometry" role="img" aria-label="直角三角形の辺上を動く点Pと三角形APD"></svg></section>
+    <section class="mp-pane"><div class="mp-panehead"><h3>面積の変化</h3><label class="form-check"><input id="mp-reveal" type="checkbox" class="form-check-input"><span class="form-check-label">全体のグラフ</span></label></div><svg id="mp-chart" role="img" aria-label="移動した道のりxと三角形の面積yのグラフ"></svg></section>
+  </main>
+  <div class="mp-current"><span>道のり <strong id="mp-distance"></strong> cm</span><span>面積 <strong id="mp-area"></strong> cm²</span><label class="form-check"><input id="mp-formula-toggle" type="checkbox" class="form-check-input"><span class="form-check-label">式・変域</span></label><span id="mp-formula" hidden></span></div>
+  <footer class="mp-controls"><div class="mp-controlrow"><button id="mp-play" class="btn btn-primary" type="button">再生</button><button id="mp-home" class="btn" type="button">Aへ戻る</button><label for="mp-position">点Pの位置</label><input id="mp-position" class="form-range" type="range" min="0" max="7" step="0.01" value="0"><span id="mp-progress" class="mp-numeric"></span></div><div class="mp-footnote"><span>点P、スライダー、グラフをドラッグして動かせます。</span><span id="mp-notice" role="status" aria-live="polite"></span></div></footer>
+</div>
+<style>
+#right-triangle-lab .mp-frac{display:inline-flex;vertical-align:middle;flex-direction:column;text-align:center;margin:0 5px}#right-triangle-lab .mp-frac span:first-child{border-bottom:1px solid currentColor;padding:0 5px 1px}#right-triangle-lab .mp-frac span:last-child{padding:1px 5px 0}
+
+#right-triangle-lab{--viz-series-2:#ffb866}
+#right-triangle-lab{--background:#0c121d;--foreground:#edf2fa;--card:#121c2a;--card-foreground:#edf2fa;--primary:#e0e8f4;--primary-foreground:#111a27;--muted:#1e2b3d;--muted-foreground:#a6b4c8;--border:#2b3b51;--input:#34465c;--accent:#203249;--accent-foreground:#edf2fa;--ring:#83d7ff;--viz-series-1:#75d8ff;color-scheme:dark;background:var(--background);color:var(--foreground);font-family:system-ui,'Yu Gothic',sans-serif;box-sizing:border-box;height:650px;max-height:100dvh;min-height:430px;padding:20px 24px;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:16px;overflow:hidden}
+#right-triangle-lab *{box-sizing:border-box}#right-triangle-lab h2,#right-triangle-lab h3{margin:0}#right-triangle-lab .mp-header{display:flex;align-items:center;justify-content:space-between;gap:16px}#right-triangle-lab .mp-sub,#right-triangle-lab .mp-footnote{color:var(--muted-foreground)}#right-triangle-lab .mp-tools{display:flex;align-items:center;gap:16px}#right-triangle-lab .mp-tools label{display:flex;align-items:center;gap:8px}#right-triangle-lab .mp-visuals{display:grid;grid-template-columns:1fr 1fr;min-height:0;gap:24px}#right-triangle-lab .mp-pane{display:flex;flex-direction:column;min-width:0;min-height:0}#right-triangle-lab .mp-pane+.mp-pane{border-left:1px solid var(--border);padding-left:24px}#right-triangle-lab .mp-panehead{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:34px}#right-triangle-lab svg{display:block;width:100%;flex:1;min-height:0;overflow:hidden;touch-action:none}#right-triangle-lab svg text{fill:var(--foreground);font-family:inherit;font-size:14px;font-weight:400}#right-triangle-lab svg .mp-tick{fill:var(--muted-foreground);font-size:12px}#right-triangle-lab .mp-current{border-top:1px solid var(--border);padding-top:14px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;min-height:48px}#right-triangle-lab .mp-current strong{font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}#right-triangle-lab #mp-formula{font-variant-numeric:tabular-nums}#right-triangle-lab .mp-controls{display:grid;gap:12px}#right-triangle-lab .mp-controlrow{display:flex;align-items:center;gap:14px}#right-triangle-lab #mp-position{flex:1;min-width:80px}#right-triangle-lab .mp-numeric{min-width:76px;text-align:right;font-variant-numeric:tabular-nums}#right-triangle-lab .mp-footnote{display:flex;justify-content:space-between;gap:16px;font-size:12px;min-height:18px}#right-triangle-lab:fullscreen{height:100dvh;max-height:none;padding:28px 36px}#right-triangle-lab .mp-target{cursor:grab}#right-triangle-lab .mp-dragging{cursor:grabbing}#right-triangle-lab [hidden]{display:none!important}
+@media(max-width:760px){#right-triangle-lab{padding:12px;gap:10px;height:640px}#right-triangle-lab .mp-tools{gap:6px}#right-triangle-lab .mp-tools label{display:block}#right-triangle-lab .mp-visuals{gap:10px}#right-triangle-lab .mp-pane+.mp-pane{padding-left:10px}#right-triangle-lab .mp-current{gap:12px}#right-triangle-lab .mp-controlrow{gap:8px}#right-triangle-lab .mp-panehead{flex-wrap:wrap}#right-triangle-lab .mp-footnote{display:block}}
+@media(max-width:480px){#right-triangle-lab{height:820px;max-height:none;min-height:0}#right-triangle-lab .mp-header{align-items:flex-start;flex-wrap:wrap}#right-triangle-lab .mp-visuals{grid-template-columns:1fr;grid-template-rows:1fr 1fr}#right-triangle-lab .mp-pane+.mp-pane{border-left:0;padding-left:0}#right-triangle-lab .mp-controlrow label{display:none}}
+@media(max-height:600px) and (min-width:761px){#right-triangle-lab{height:100dvh;padding:10px 18px;gap:8px}#right-triangle-lab .mp-current{padding-top:8px}#right-triangle-lab .mp-footnote{display:none}}
+</style>
+<script>
+(()=>{
+const root=document.getElementById('right-triangle-lab'),get=id=>root.querySelector('#mp-'+id),geo=get('geometry'),chart=get('chart');
+const sets=[{w:4,h:3,label:'元の問題：AB＝4、BC＝3 cm'},{w:6,h:3,label:'セット1：AB＝6、BC＝3 cm'},{w:4,h:5,label:'セット2：AB＝4、BC＝5 cm'},{w:8,h:3,label:'セット3：AB＝8、BC＝3 cm'},{w:6,h:5,label:'セット4：AB＝6、BC＝5 cm'},{w:8,h:5,label:'セット5：AB＝8、BC＝5 cm'}];
+let selected=0,x=0,reveal=false,showFormula=false,playing=false,last=0,raf=0,geometry,plot;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=n=>Number(n.toFixed(2)).toString();
+const data=()=>sets[selected],length=()=>data().w+data().h,areaAt=v=>v<=data().w?data().h*v/2:data().w*Math.max(0,length()-v)/2;
+const el=(tag,attrs={},text)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(text!==undefined)e.textContent=text;return e};
+const add=(svg,tag,attrs,text)=>{const e=el(tag,attrs,text);svg.append(e);return e};
+const path=(points)=>points.map((p,i)=>(i?'L':'M')+p.join(',')).join(' ');
+const save=()=>{try{localStorage.setItem('right-triangle-simulator-v1',JSON.stringify({privateContent:{selected,x,reveal,showFormula}}));}catch{}};
+function stop(){playing=false;cancelAnimationFrame(raf);last=0;get('play').textContent='再生';}
+function drawGeometry(){
+ const {w,h}=data(),W=geo.clientWidth,H=geo.clientHeight;if(W<1||H<1)return;
+ geo.setAttribute('viewBox',`0 0 ${W} ${H}`);geo.replaceChildren();
+ const scale=Math.max(1,Math.min((W-116)/w,(H-112)/h)),rw=w*scale,rh=h*scale,left=(W-rw)/2,top=(H-rh)/2-3;
+ const A=[left,top+rh],B=[left+rw,top+rh],C=[left+rw,top];
+ const P=x<=w?[left+x*scale,top+rh]:[left+rw,top+rh-(x-w)*scale];
+ geometry={left,top,scale,w,h,W,H};
+ add(geo,'path',{d:path([A,P,C])+' Z',fill:'var(--viz-series-1)',opacity:'.18'});
+ add(geo,'path',{d:path([A,B,C,A]),fill:'none',stroke:'var(--muted-foreground)','stroke-width':1.5,'data-triangle-outline':'true'});
+ add(geo,'path',{d:path([A,P,C,A]),fill:'none',stroke:'var(--viz-series-1)','stroke-width':2});
+ add(geo,'path',{d:path([[B[0]-12,B[1]],[B[0]-12,B[1]-12],[B[0],B[1]-12]]),fill:'none',stroke:'var(--muted-foreground)','stroke-width':1});
+ const traveled=x<=w?[A,P]:[A,B,P];
+ add(geo,'path',{d:path(traveled),fill:'none',stroke:'var(--viz-series-2)','stroke-width':5,'stroke-linecap':'round','stroke-linejoin':'round','data-distance-path':'true','aria-label':`Aから点Pまでの道のり ${fmt(x)} cm`});
+ [['A',A,-18,19],['B',B,10,19],['C',C,10,-10]].forEach(([t,p,dx,dy])=>add(geo,'text',{x:p[0]+dx,y:p[1]+dy},t));
+ add(geo,'text',{x:left+rw/2,y:A[1]+32,'text-anchor':'middle'},`AB = ${w} cm`);
+ add(geo,'text',{x:B[0]+17,y:top+rh/2,'dominant-baseline':'middle'},`${h} cm`);
+ add(geo,'circle',{cx:P[0],cy:P[1],r:8,fill:'var(--viz-series-1)'});
+ add(geo,'circle',{cx:P[0],cy:P[1],r:22,fill:'transparent',class:'mp-target','data-drag-point':'true'});
+ add(geo,'text',{x:P[0]+(x<=w?0:-18),y:P[1]+(x<=w?-16:4),'text-anchor':x<=w?'middle':'end'},'P');
+ add(geo,'line',{x1:W/2-98,x2:W/2-70,y1:H-7,y2:H-7,stroke:'var(--viz-series-2)','stroke-width':5,'stroke-linecap':'round'});
+ add(geo,'text',{x:W/2-59,y:H-2},`道のり x = ${fmt(x)} cm`);
+ get('side').textContent=x===length()?'Cに到着':x===0?'Aから出発':x<w?'辺AB上':x===w?'Bを通過':'辺BC上';
+}
+function drawChart(){
+ const {w,h}=data(),W=chart.clientWidth,H=chart.clientHeight;if(W<1||H<1)return;chart.setAttribute('viewBox',`0 0 ${W} ${H}`);chart.replaceChildren();
+ const l=64,r=W-20,t=30,b=H-44,dx=length(),dy=w*h/2,px=v=>l+v/dx*(r-l),py=v=>b-v/(dy*1.15)*(b-t);
+ plot={l,r,t,b,dx,W,H};
+ const stepX=dx>14?2:1,stepY=dy>12?4:dy>8?2:1;
+ for(let i=0;i<=dx;i+=stepX){const X=px(i);add(chart,'line',{x1:X,x2:X,y1:t,y2:b,stroke:'var(--border)','stroke-width':.6});add(chart,'text',{x:X,y:b+21,'text-anchor':'middle',class:'mp-tick'},i);}
+ if(dx%stepX)add(chart,'text',{x:r,y:b+21,'text-anchor':'end',class:'mp-tick'},dx);
+ for(let i=0;i<=dy;i+=stepY){const Y=py(i);add(chart,'line',{x1:l,x2:r,y1:Y,y2:Y,stroke:'var(--border)','stroke-width':.6});add(chart,'text',{x:l-10,y:Y+4,'text-anchor':'end',class:'mp-tick'},i);}
+ add(chart,'rect',{x:l,y:t,width:r-l,height:b-t,fill:'none',stroke:'var(--border)','stroke-width':1,'data-chart-frame':'true'});
+ add(chart,'text',{x:l,y:17,class:'axis-title','data-axis':'y'},'面積 y (cm²)');
+ add(chart,'text',{x:r,y:H-5,'text-anchor':'end',class:'axis-title','data-axis':'x'},'道のり x (cm)');
+ const full=[[0,0],[w,dy],[dx,0]],scaled=p=>[px(p[0]),py(p[1])];
+ if(reveal)add(chart,'path',{d:path(full.map(scaled)),fill:'none',stroke:'var(--viz-series-1)','stroke-width':2,opacity:'.45','stroke-dasharray':'5 5'});
+ const done=full.filter(p=>p[0]<x);done.push([x,areaAt(x)]);
+ add(chart,'path',{d:path(done.map(scaled)),fill:'none',stroke:'var(--viz-series-1)','stroke-width':3,'stroke-linejoin':'round'});
+ add(chart,'path',{d:`M${px(x)},${b}V${py(areaAt(x))}H${l}`,fill:'none',stroke:'var(--muted-foreground)','stroke-width':1,'stroke-dasharray':'3 4'});
+ add(chart,'circle',{cx:px(x),cy:py(areaAt(x)),r:6,fill:'var(--viz-series-1)'});
+ add(chart,'rect',{x:l,y:t,width:r-l,height:b-t,fill:'transparent','data-chart-hit':'true'});
+}
+function update(){
+ get('position').max=length();get('position').value=x;get('position').setAttribute('aria-valuetext',`道のり${fmt(x)}cm、面積${fmt(areaAt(x))}平方cm`);
+ get('distance').textContent=fmt(x);get('area').textContent=fmt(areaAt(x));get('progress').textContent=`全${length()} cm`;
+ const {w,h}=data(),edge=x<=w?0:1,f=get('formula');
+ f.replaceChildren();
+ if(edge===0){
+   f.append(document.createTextNode('y = '));
+   const fraction=document.createElement('span');fraction.className='mp-frac';fraction.setAttribute('aria-label',`2分の${h}`);
+   for(const n of [h,2]){const s=document.createElement('span');s.textContent=n;fraction.append(s);}
+   f.append(fraction,document.createTextNode(`x　（0 ≦ x ≦ ${w}）`));
+ }else f.textContent=`y = ${w*(w+h)/2} − ${w/2}x　（${w} ≦ x ≦ ${w+h}）`;
+ f.hidden=!showFormula;
+ drawGeometry();drawChart();
+}
+function setX(v,persist=false){x=clamp(v,0,length());update();if(persist)save();}
+sets.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.label;get('problem').append(o);});
+get('problem').addEventListener('change',()=>{stop();selected=Number(get('problem').value);setX(0,true);});
+get('position').addEventListener('input',()=>{stop();setX(Number(get('position').value));});get('position').addEventListener('change',save);
+get('reveal').addEventListener('change',()=>{reveal=get('reveal').checked;update();save();});
+get('formula-toggle').addEventListener('change',()=>{showFormula=get('formula-toggle').checked;update();save();});
+get('home').addEventListener('click',()=>{stop();setX(0,true);});
+function tick(ts){if(!playing)return;if(last)setX(x+Math.min((ts-last)/1000,.1));last=ts;if(x>=length()){stop();save();get('notice').textContent='Cに到着しました。';return;}raf=requestAnimationFrame(tick);}
+get('play').addEventListener('click',()=>{if(playing){stop();save();return;}if(x>=length())setX(0);playing=true;last=0;get('notice').textContent='';get('play').textContent='一時停止';raf=requestAnimationFrame(tick);});
+get('full').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(root.requestFullscreen)await root.requestFullscreen();else throw new Error('unavailable');}catch{get('notice').textContent='この表示では全画面が許可されていません。表示の拡大をご利用ください。';}});
+document.addEventListener('fullscreenchange',()=>{get('full').textContent=document.fullscreenElement?'全画面を終了':'全画面表示';update();});
+let drag=null;
+function location(e,svg){const b=svg.getBoundingClientRect();return [(e.clientX-b.left)*svg.clientWidth/b.width,(e.clientY-b.top)*svg.clientHeight/b.height];}
+function move(e){
+ if(!drag)return;
+ if(drag==='chart'){const [v]=location(e,chart);setX((v-plot.l)/(plot.r-plot.l)*plot.dx);return;}
+ const [u,v]=location(e,geo),g=geometry,right=g.left+g.w*g.scale,bottom=g.top+g.h*g.scale;
+ const candidates=[
+ {d:Math.hypot(u-clamp(u,g.left,right),v-bottom),x:clamp((u-g.left)/g.scale,0,g.w)},
+ {d:Math.hypot(u-right,v-clamp(v,g.top,bottom)),x:g.w+clamp((bottom-v)/g.scale,0,g.h)}];
+ candidates.sort((a,b)=>a.d-b.d);setX(candidates[0].x);
+}
+geo.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-drag-point]'))return;stop();drag='geo';geo.setPointerCapture(e.pointerId);move(e);});
+chart.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-chart-hit]'))return;stop();drag='chart';chart.setPointerCapture(e.pointerId);move(e);});
+for(const svg of [geo,chart]){svg.addEventListener('pointermove',move);const finish=()=>{if(drag){drag=null;save();}};svg.addEventListener('pointerup',finish);svg.addEventListener('pointercancel',finish);}
+function restore(state){const s=state?.privateContent;if(!s)return;stop();selected=clamp(Math.floor(Number(s.selected)||0),0,sets.length-1);x=clamp(Number(s.x)||0,0,length());reveal=!!s.reveal;showFormula=!!s.showFormula;get('problem').value=selected;get('reveal').checked=reveal;get('formula-toggle').checked=showFormula;update();}
+new ResizeObserver(()=>{drawGeometry();drawChart();}).observe(root);
+new ResizeObserver(()=>{drawGeometry();drawChart();}).observe(get('formula'));
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+try{restore(JSON.parse(localStorage.getItem('right-triangle-simulator-v1')));}catch{}update();
+})();
+</script>
+
+</body></html>
